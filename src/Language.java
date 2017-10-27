@@ -70,7 +70,6 @@ public class Language {
 
         GermanCollector germanCollection = new GermanCollector("GermanText.txt", order);
         EnglishCollector englishCollection = new EnglishCollector("EnglishText.txt", order);
-        List<String> combs = englishCollection.getContextCombinations();
 
         /*Map<String, Values> words = collection.getContext();
 

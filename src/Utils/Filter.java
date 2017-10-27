@@ -1,5 +1,7 @@
 package Utils;
 
+import com.sun.org.apache.xpath.internal.SourceTree;
+
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -23,12 +25,22 @@ public final class Filter {
      * @param text
      */
     public static String removeSpecialCharacters(String text) {
-        text = text.replaceAll("[-+.^:,;\'!?_/\"–„“]", "")
-                .replaceAll("\\[", "")
-                .replaceAll("]", "")
+        text = text.replaceAll("[-+.^:,;\'!?\\[\\]_\"–„“]", "")
                 .replaceAll("[0-9]", "")
                 .replaceAll("  \\+", " ");
         return text;
+    }
+
+    public static String upperCaseCharacters(String text) {
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < text.length(); i++) {
+            String character = Character.toString(text.charAt(i));
+            if (character.equals("ß"))
+                sb.append("ß");
+            else
+                sb.append(character.toUpperCase());
+        }
+        return sb.toString();
     }
 
     /**

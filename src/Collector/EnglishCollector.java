@@ -17,8 +17,6 @@ import java.util.*;
  */
 
 public class EnglishCollector extends WordsCollector {
-    // Name of file to read
-    private File file;
     // Order of context
     private int order;
     // English alphabet
@@ -29,7 +27,6 @@ public class EnglishCollector extends WordsCollector {
     private Map<String, Values> associations;
     // List of combinations created in context
     private List<String> contextCombinations;
-    private static Scanner sc;
 
     public EnglishCollector(String path, int order) {
         super();

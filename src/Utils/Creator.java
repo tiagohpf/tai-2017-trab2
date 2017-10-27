@@ -24,7 +24,8 @@ public final class Creator {
             List<String> alphabet = new ArrayList<>();
             while(sc.hasNext()) {
                 String line = sc.nextLine();
-                line = Filter.removeSpecialCharacters(line).toUpperCase();
+                line = Filter.removeSpecialCharacters(line);
+                line = Filter.upperCaseCharacters(line);
                 for (int i = 0; i <  line.length(); i++) {
                     String character = Character.toString(line.charAt(i));
                     if (!alphabet.contains(character))
@@ -49,7 +50,8 @@ public final class Creator {
             Scanner sc = new Scanner(file);
             while (sc.hasNext()) {
                 String line = sc.nextLine();
-                line = Filter.removeSpecialCharacters(line).toUpperCase();
+                line = Filter.removeSpecialCharacters(line);
+                line = Filter.upperCaseCharacters(line);
                 // First, get the character in text
                 for (int i = order; i < line.length(); i++) {
                     String word = new String();
