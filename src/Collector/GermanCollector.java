@@ -1,11 +1,9 @@
 package Collector;
 
 import Utils.Creator;
-import Utils.Filter;
 import Utils.Values;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.util.*;
 
 /**
@@ -24,7 +22,7 @@ public class GermanCollector extends WordsCollector {
     // Order of context
     private int order;
     // German alphabet
-    private List<String> germanAlphabet;
+    private List<String> alphabet;
     // List that counts the appearance of contexts in text
     private Map<String, Values> context;
     // List of combinations with order = 1
@@ -38,9 +36,9 @@ public class GermanCollector extends WordsCollector {
         this.context = super.getContext();
         this.associations = super.getAssociations();
         this.contextCombinations = super.getContextCombinations();
-        this.germanAlphabet = Creator.createAlphabet(path);
+        this.alphabet = Creator.createAlphabet(path);
         this.order = order;
-        Creator.readFile(path, order, context, germanAlphabet, associations,contextCombinations);
-        System.out.println("German Alphabet: " + germanAlphabet);
+        Creator.readFile(path, order, context, alphabet, associations, contextCombinations);
+        System.out.println("German Alphabet: " + alphabet);
     }
 }
