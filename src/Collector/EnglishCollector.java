@@ -1,5 +1,6 @@
 package Collector;
 
+import Utils.Creator;
 import Utils.Filter;
 import Utils.Values;
 
@@ -17,7 +18,7 @@ import java.util.*;
  * @author Tiago Faria, 73714, tiagohpf@ua.pt
  */
 
-public class EnglishCollector extends AbstractWordsCollector {
+public class EnglishCollector extends WordsCollector {
     // Name of file to read
     private File file;
     // Order of context
@@ -32,53 +33,14 @@ public class EnglishCollector extends AbstractWordsCollector {
     private List<String> contextCombinations;
     private static Scanner sc;
 
-    public EnglishCollector(String path, int order, List<String> alphabet) {
+    public EnglishCollector(String path, int order) {
         super();
         this.context = super.getContext();
         this.associations = super.getAssociations();
         this.contextCombinations = super.getContextCombinations();
-        this.englishAlphabet = new ArrayList<>(alphabet);
+        this.englishAlphabet = Creator.createAlphabet(path);
         this.order = order;
-        readFile(path);
+        Creator.readFile(path, order, context, englishAlphabet, associations,contextCombinations);
         System.out.println("English Alphabet: " + englishAlphabet);
-    }
-
-    @Override
-    public void readFile(String path) {
-        // Create the file
-        file = new File(path);
-        // Read the file
-        try {
-            sc = new Scanner(file);
-        } catch (FileNotFoundException e) {
-            System.err.println("ERROR: " + path + " not found!");
-            System.exit(1);
-        }
-
-        while (sc.hasNext()) {
-            String line = sc.nextLine();
-            line = Filter.removeSpecialCharacters(line);
-
-            // First, get the character in text
-            for (int i = order; i < line.length(); i++) {
-                String word = new String();
-                char letter = line.charAt(i);
-                // Second, get the context give an order
-                for (int j = i - order; j < i; j++)
-                    word += line.charAt(j);
-                // Add a new context
-                addOccurrence(context, word.toUpperCase(), Character.toUpperCase(letter), englishAlphabet);
-            }
-            // First, get the character in text
-            for (int i = 1; i < line.length(); i++) {
-                String word = new String();
-                char letter = line.charAt(i);
-                //Second, get the context give an order
-                for (int j = i - 1; j < i; j++)
-                    word += line.charAt(j);
-                // Add a new association
-                addOccurrence(associations, word.toUpperCase(), Character.toUpperCase(letter), englishAlphabet);
-            }
-        }
     }
 }

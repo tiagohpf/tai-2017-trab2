@@ -1,8 +1,6 @@
 import Collector.EnglishCollector;
 import Collector.GermanCollector;
 import Utils.*;
-import Probabilities.ProbManager;
-import Collector.WordsCollector;
 
 import java.util.*;
 
@@ -70,9 +68,9 @@ public class Language {
             System.exit(1);
         }
 
-        List<String> alphabet = Creator.createAlphabet(); // List of alphabet. 27 characters [A-Z] and whitespace
-        GermanCollector germanCollection = new GermanCollector("GermanText.txt", order, alphabet);
-        EnglishCollector englishCollection = new EnglishCollector("EnglishText.txt", order, alphabet);
+        GermanCollector germanCollection = new GermanCollector("GermanText.txt", order);
+        EnglishCollector englishCollection = new EnglishCollector("EnglishText.txt", order);
+        List<String> combs = englishCollection.getContextCombinations();
 
         /*Map<String, Values> words = collection.getContext();
 

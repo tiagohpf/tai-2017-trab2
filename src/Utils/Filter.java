@@ -23,9 +23,11 @@ public final class Filter {
      * @param text
      */
     public static String removeSpecialCharacters(String text) {
-        text = text.replaceAll("[-+.^:,;'!?_\"]", "")
-                .replace("[", "")
-                .replace("]", "");
+        text = text.replaceAll("[-+.^:,;\'!?_/\"–„“]", "")
+                .replaceAll("\\[", "")
+                .replaceAll("]", "")
+                .replaceAll("[0-9]", "")
+                .replaceAll("  \\+", " ");
         return text;
     }
 
