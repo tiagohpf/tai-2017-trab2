@@ -118,6 +118,8 @@ public final class Creator {
             else
                 values.addValue(character, 0);
         }
+        // Add column for unknown characters
+        values.addValue("?", 0);
         map.put(word, values);
         if (word.length() == order)
             contextCombinations.add(word);
