@@ -1,6 +1,4 @@
-import Collector.EnglishCollector;
-import Collector.GermanCollector;
-import Collector.ItalianCollector;
+import Collector.*;
 import Utils.*;
 import Probabilities.ProbManager;
 
@@ -73,14 +71,18 @@ public class Language {
         Map<String, Double> entropyValues = new HashMap<>();
         GermanCollector germanCollection = new GermanCollector("GermanText.txt", order);
         List<String> germanAlphabet = germanCollection.getAlphabet();
+        System.out.println("German: " + germanAlphabet);
+        System.out.println();
         Map<String, Values> germanContext = germanCollection.getContext();
         List<String> germanCombinations = germanCollection.getContextCombinations();
         ProbManager germanProb = new ProbManager(germanContext, germanCombinations, alpha, germanAlphabet);
         double germanEntropy = germanProb.getLanguageEntropy(new File("GermanText.txt"), order);
-        entropyValues.put("German", germanEntropy);
+        entropyValues.put("German: ", germanEntropy);
 
         EnglishCollector englishCollection = new EnglishCollector("EnglishText.txt", order);
         List<String> englishAlphabet = englishCollection.getAlphabet();
+        System.out.println("English: " + englishAlphabet);
+        System.out.println();
         Map<String, Values> englishContext = englishCollection.getContext();
         List<String> englishCombinations = englishCollection.getContextCombinations();
         ProbManager englishProb = new ProbManager(englishContext, englishCombinations, alpha, englishAlphabet);
@@ -89,8 +91,24 @@ public class Language {
 
         ItalianCollector italianCollector = new ItalianCollector("ItalianText.txt", order);
         List<String> italianAlphabet = italianCollector.getAlphabet();
-        System.out.println(italianAlphabet);
+        System.out.println("Italian: " + italianAlphabet);
         System.out.println();
+
+        SpanishCollector spanishCollector = new SpanishCollector("SpanishText.txt", order);
+        List<String> spanishAlphabet = spanishCollector.getAlphabet();
+        System.out.println("Spanish: " + spanishAlphabet);
+        System.out.println();
+
+        FrenchCollector frenchCollector = new FrenchCollector("FrenchText.txt", order);
+        List<String> frenchAlphabet = frenchCollector.getAlphabet();
+        System.out.println("French: " + frenchAlphabet);
+        System.out.println();
+
+        PortugueseCollector portugueseCollector = new PortugueseCollector("PortugueseText.txt", order);
+        List<String> portugueseAlphabet = portugueseCollector.getAlphabet();
+        System.out.println("Portuguese: " + portugueseAlphabet);
+        System.out.println();
+
 
         List<Map.Entry<String, Double>> list = new LinkedList<>(entropyValues.entrySet());
         Collections.sort(list, Comparator.comparing(o -> (o.getValue())));
