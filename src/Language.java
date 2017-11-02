@@ -1,5 +1,6 @@
 import Collector.EnglishCollector;
 import Collector.GermanCollector;
+import Collector.ItalianCollector;
 import Utils.*;
 import Probabilities.ProbManager;
 
@@ -75,7 +76,7 @@ public class Language {
         Map<String, Values> germanContext = germanCollection.getContext();
         List<String> germanCombinations = germanCollection.getContextCombinations();
         ProbManager germanProb = new ProbManager(germanContext, germanCombinations, alpha, germanAlphabet);
-        double germanEntropy = germanProb.getLanguageEntropy(new File("EnglishText.txt"), order);
+        double germanEntropy = germanProb.getLanguageEntropy(new File("GermanText.txt"), order);
         entropyValues.put("German", germanEntropy);
 
         EnglishCollector englishCollection = new EnglishCollector("EnglishText.txt", order);
@@ -85,6 +86,11 @@ public class Language {
         ProbManager englishProb = new ProbManager(englishContext, englishCombinations, alpha, englishAlphabet);
         double englishEntropy = englishProb.getLanguageEntropy(new File("EnglishText.txt"), order);
         entropyValues.put("English", englishEntropy);
+
+        ItalianCollector italianCollector = new ItalianCollector("ItalianText.txt", order);
+        List<String> italianAlphabet = italianCollector.getAlphabet();
+        System.out.println(italianAlphabet);
+        System.out.println();
 
         List<Map.Entry<String, Double>> list = new LinkedList<>(entropyValues.entrySet());
         Collections.sort(list, Comparator.comparing(o -> (o.getValue())));
