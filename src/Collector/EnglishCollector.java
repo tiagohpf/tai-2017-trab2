@@ -3,7 +3,6 @@ package Collector;
 import Utils.Creator;
 import Utils.Values;
 
-import java.io.File;
 import java.util.*;
 
 /**
@@ -23,19 +22,15 @@ public class EnglishCollector extends WordsCollector {
     private List<String> alphabet;
     // List that counts the appearance of contexts in text
     private Map<String, Values> context;
-    // List of combinations with order = 1
-    private Map<String, Values> associations;
     // List of combinations created in context
     private List<String> contextCombinations;
 
     public EnglishCollector(String path, int order) {
-        super();
+        super(path);
         this.context = super.getContext();
-        this.associations = super.getAssociations();
         this.contextCombinations = super.getContextCombinations();
-        this.alphabet = Creator.createAlphabet(path);
+        this.alphabet = super.getAlphabet();
         this.order = order;
-        Creator.readFile(path, order, context, alphabet, associations, contextCombinations);
-        System.out.println("English Alphabet: " + alphabet);
+        Creator.loadWords(path, order, context, alphabet, contextCombinations);
     }
 }

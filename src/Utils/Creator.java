@@ -41,8 +41,8 @@ public final class Creator {
         return null;
     }
 
-    public static void readFile(String path, int order, Map<String, Values> context, List<String> alphabet,
-                         Map<String, Values> associations, List<String> contextCombinations) {
+    public static void loadWords(String path, int order, Map<String, Values> context, List<String> alphabet,
+                                 List<String> combinations) {
         // Create the file
         File file = new File(path);
         // Read the file
@@ -60,17 +60,7 @@ public final class Creator {
                     for (int j = i - order; j < i; j++)
                         word += line.charAt(j);
                     // Add a new context
-                    addOccurrence(context, word, letter, alphabet, contextCombinations, order);
-                }
-                // First, get the character in text
-                for (int i = 1; i < line.length(); i++) {
-                    String word = new String();
-                    String letter = Character.toString(line.charAt(i));
-                    //Second, get the context give an order
-                    for (int j = i - 1; j < i; j++)
-                        word += line.charAt(j);
-                    // Add a new association
-                    addOccurrence(associations, word, letter, alphabet, contextCombinations, order);
+                    addNewWord(context, word, letter, alphabet, combinations, order);
                 }
             }
         } catch (FileNotFoundException e) {
@@ -89,8 +79,8 @@ public final class Creator {
      * @param word
      * @param letter
      */
-    private static void addOccurrence(Map<String, Values> context, String word, String letter,
-                                 List<String> alphabet, List<String> contextCombinations, int order) {
+    private static void addNewWord(Map<String, Values> context, String word, String letter,
+                                   List<String> alphabet, List<String> combinations, int order) {
         Map<String, Values> filter = Filter.filterContext(context, word);
         if (filter.size() > 0) {
             Values values = filter.get(word);
@@ -98,19 +88,19 @@ public final class Creator {
             values.addValue(letter, number);
             context.put(word, values);
         } else
-            createNewInstanceInList(context, word, letter, alphabet, contextCombinations, order);
+            createNewInstance(context, word, letter, alphabet, combinations, order);
     }
 
     /**
      * Create a new instance in context
      * If the association was found in text, create with value 1. Otherwise, create with value 0
      *
-     * @param map
+     * @param context
      * @param word
      * @param letter
      */
-    private static void createNewInstanceInList(Map<String, Values> map, String word, String letter, List<String> alphabet,
-                                           List<String> contextCombinations, int order) {
+    private static void createNewInstance(Map<String, Values> context, String word, String letter,
+                                          List<String> alphabet, List<String> combinations, int order) {
         Values values = new Values();
         for (String character : alphabet) {
             if (letter.equals(character))
@@ -120,8 +110,8 @@ public final class Creator {
         }
         // Add column for unknown characters
         values.addValue("?", 0);
-        map.put(word, values);
+        context.put(word, values);
         if (word.length() == order)
-            contextCombinations.add(word);
+            combinations.add(word);
     }
 }

@@ -21,18 +21,18 @@ import java.util.*;
 public abstract class WordsCollector {
     // List that counts the appearance of contexts in text
     private Map<String, Values> context;
-    // List of combinations with order = 1
-    private Map<String, Values> associations;
     // List of combinations created in context
     private List<String> contextCombinations;
+    // Language's alphabet
+    private List<String> alphabet;
 
     /**
      * Constructor
      */
-    public WordsCollector() {
-        this.context = new HashMap<>();
-        this.associations = new HashMap<>();
-        this.contextCombinations = new ArrayList<>();
+    public WordsCollector(String path) {
+        context = new HashMap<>();
+        contextCombinations = new ArrayList<>();
+        alphabet = Creator.createAlphabet(path);
     }
 
     /**
@@ -53,12 +53,7 @@ public abstract class WordsCollector {
         return contextCombinations;
     }
 
-    /**
-     * Return context of order = 1
-     *
-     * @return context
-     */
-    public Map<String, Values> getAssociations() {
-        return associations;
+    public List<String> getAlphabet() {
+        return alphabet;
     }
 }

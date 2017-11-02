@@ -1,7 +1,9 @@
 import Collector.EnglishCollector;
 import Collector.GermanCollector;
 import Utils.*;
+import Probabilities.ProbManager;
 
+import java.io.File;
 import java.util.*;
 
 /**
@@ -64,32 +66,33 @@ public class Language {
             }
         } else {
             System.err.println("ERROR: Invalid number of arguments");
-            System.err.println("USAGE: filePath order (alpha) (length to generate text)");
+            System.err.println("USAGE: filePath order (alpha)");
             System.exit(1);
         }
-
+        Map<String, Double> entropyValues = new HashMap<>();
         GermanCollector germanCollection = new GermanCollector("GermanText.txt", order);
+        List<String> germanAlphabet = germanCollection.getAlphabet();
+        Map<String, Values> germanContext = germanCollection.getContext();
+        List<String> germanCombinations = germanCollection.getContextCombinations();
+        ProbManager germanProb = new ProbManager(germanContext, germanCombinations, alpha, germanAlphabet);
+        double germanEntropy = germanProb.getLanguageEntropy(new File("EnglishText.txt"), order);
+        entropyValues.put("German", germanEntropy);
+
         EnglishCollector englishCollection = new EnglishCollector("EnglishText.txt", order);
+        List<String> englishAlphabet = englishCollection.getAlphabet();
+        Map<String, Values> englishContext = englishCollection.getContext();
+        List<String> englishCombinations = englishCollection.getContextCombinations();
+        ProbManager englishProb = new ProbManager(englishContext, englishCombinations, alpha, englishAlphabet);
+        double englishEntropy = englishProb.getLanguageEntropy(new File("EnglishText.txt"), order);
+        entropyValues.put("English", englishEntropy);
 
-        /*Map<String, Values> words = collection.getContext();
-
-        words = new TreeMap<>(words);
-        for(Map.Entry<String, Values> entry : words.entrySet()) {
-            Values values = entry.getValue();
-            System.out.println(entry.getKey() + ", " + values.getValues().size());
-        }
-
-        Map<String, Values>associations = collection.getAssociations();
-        List<String> combinations = germanCollection.getContextCombinations();
-        ProbManager probabilities = new ProbManager(words, combinations, alpha, alphabet,
-                associations);
-        Map<String, Probabilities> contextProbabilites = probabilities.getContextProbs();
-        Map<String, Probabilities>  assocProbabilites = probabilities.getAssocProbs();
-        Map<String, Integer> contextCounter = probabilities.getContextCounter();
-        Map<String, Integer> assocCounter = probabilities.getAssocCounter();
-        Generator generator = new Generator(generateLength, contextCounter, assocCounter, contextProbabilites,
-                assocProbabilites, order);
-        System.out.println(generator.generateText());
-        System.out.println("Entropy: " + String.format("%.3f", probabilities.getEntropy()) + " bits");*/
+        List<Map.Entry<String, Double>> list = new LinkedList<>(entropyValues.entrySet());
+        Collections.sort(list, Comparator.comparing(o -> (o.getValue())));
+        System.out.println("ENTROPY OF LANGUAGES");
+        System.out.println("-------------------------");
+        for (Map.Entry<String, Double> entry : list)
+            System.out.format("%10s: %.3f bits\n", entry.getKey(), entry.getValue());
+        System.out.println("-------------------------");
+        System.out.println("LANGUAGE: " + list.get(0).getKey());
     }
 }

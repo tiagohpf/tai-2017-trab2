@@ -4,9 +4,12 @@ import Utils.Filter;
 import Utils.Probabilities;
 import Utils.Values;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Scanner;
 
 /**
  * TAI, November 2017
@@ -22,18 +25,12 @@ import java.util.Map;
 public class ProbManager {
     // List that counts the appearance of contexts in text
     private Map<String, Values> context;
-    // List of combinations with order = 1
-    private Map<String, Values> associations;
     // List of counting words after context
-    private Map<String, Integer> contextCounter;
+    private Map<String, Integer> counter;
     // List of probabilities in context
-    private Map<String, Probabilities> contextProbs;
-    // List of counting associations
-    private Map<String, Integer> assocCounter;
-    // List of probabilities in associations
-    private Map<String, Probabilities> assocProbs;
+    private Map<String, Probabilities> probabilities;
     // List of combinations created in context
-    private List<String> contextCombinations;
+    private List<String> combinations;
     // List of alphabet. 27 characters [A-Z] and whitespace
     private List<String> alphabet;
     private double alpha;
@@ -42,56 +39,45 @@ public class ProbManager {
      * Constructor
      *
      * @param context
-     * @param contextCombinations
+     * @param combinations
      * @param alpha
      * @param alphabet
-     * @param associations
      */
-    public ProbManager(Map<String, Values> context, List<String> contextCombinations, double alpha,
-                       List<String> alphabet, Map<String, Values> associations) {
+    public ProbManager(Map<String, Values> context, List<String> combinations, double alpha,
+                       List<String> alphabet) {
         this.context = context;
-        contextCounter = new HashMap<>();
-        contextProbs = new HashMap<>();
-        assocCounter = new HashMap<>();
-        assocProbs = new HashMap<>();
-        this.contextCombinations = contextCombinations;
+        counter = new HashMap<>();
+        probabilities = new HashMap<>();
+        this.combinations = combinations;
         this.alpha = alpha;
         this.alphabet = alphabet;
-        this.associations = associations;
-        sumOccurrences(contextCombinations, contextCounter, context);
-        sumOccurrences(alphabet, assocCounter, associations);
-        calculateProbabilities(contextCounter, context, contextProbs);
-        calculateProbabilities(assocCounter, associations, assocProbs);
+        countWordsOccurrences(combinations, counter, context);
+        calculateProbabilities(counter, context, probabilities);
     }
 
-    /**
-     * Calculate entropy
-     *
-     * @return entropy
-     */
-    public double getEntropy() {
-        // Get number of total contextCombinations created
-        int totalCombinations = getNumberOfCombinationsInContext();
-        double entropy = 0;
-        for (Map.Entry<String, Integer> wordOccurrences : contextCounter.entrySet()) {
-            String word = wordOccurrences.getKey();
-            // Get number of occurrences of certain word
-            int occurrences = wordOccurrences.getValue();
-            double h = 0;
-            // Get probabilities of certain word
-            Map<String, Probabilities> filter = Filter.filterContextProbs(contextProbs, word);
-            // Calculate entropy row by row
-            for (Map.Entry<String, Probabilities> termProb : filter.entrySet()) {
-                Probabilities probs = termProb.getValue();
-                for (Map.Entry<String, Double> entry : probs.getProbs().entrySet()) {
-                    double prob = entry.getValue();
-                    // log a (x) = log b (x) / log b (a)
-                    h += (prob * (Math.log10(prob) / Math.log10(2))) * (-1);
+    public double getLanguageEntropy(File file, int order) {
+        double result = 0;
+        try {
+            Scanner sc = new Scanner(file);
+            while (sc.hasNext()) {
+                String line = sc.nextLine();
+                line = Filter.removeSpecialCharacters(line);
+                line = Filter.upperCaseCharacters(line);
+                // First, get the character in text
+                for (int i = order; i < line.length(); i++) {
+                    String word = new String();
+                    String letter = Character.toString(line.charAt(i));
+                    // Second, get the context give an order
+                    for (int j = i - order; j < i; j++)
+                        word += line.charAt(j);
+                    result += getEntropyFromContext(word, letter);
                 }
             }
-            entropy += h * (occurrences * 1.0 / totalCombinations);
+        } catch(FileNotFoundException ex) {
+            System.err.println("ERROR: File not found!");
+            System.exit(1);
         }
-        return entropy;
+        return result;
     }
 
     /**
@@ -99,17 +85,8 @@ public class ProbManager {
      *
      * @return probabilities of context
      */
-    public Map<String, Probabilities> getContextProbs() {
-        return contextProbs;
-    }
-
-    /**
-     * Get all probabilities from associations
-     *
-     * @return probabilities of associations
-     */
-    public Map<String, Probabilities>  getAssocProbs() {
-        return assocProbs;
+    public Map<String, Probabilities> getProbabilities() {
+        return probabilities;
     }
 
     /**
@@ -117,30 +94,22 @@ public class ProbManager {
      *
      * @return number of occurrences in context
      */
-    public Map<String, Integer> getContextCounter() {
-        return contextCounter;
-    }
-
-    /**
-     * Get number of occurrences in each association
-     *
-     * @return number of occurrences in associations
-     */
-    public Map<String, Integer>  getAssocCounter() {
-        return assocCounter;
+    public Map<String, Integer> getCounter() {
+        return counter;
     }
 
     // Calculate the total number of occurrences, row by row
-    private void sumOccurrences(List<String> domain, Map<String, Integer> counter,
-                                Map<String, Values> context) {
-        for (int i = 0; i < domain.size(); i++) {
+    private void countWordsOccurrences(List<String> combinations,
+                                       Map<String, Integer> counter,
+                                       Map<String, Values> context) {
+        for (int i = 0; i < combinations.size(); i++) {
             int sum = 0;
-            String word = domain.get(i);
+            String word = combinations.get(i);
             Map<String, Values> filter = Filter.filterContext(context ,word);
             for(Map.Entry<String, Values> entry : filter.entrySet()) {
                 Values values = entry.getValue();
-                for(Map.Entry<String, Integer> vals : values.getValues().entrySet())
-                    sum += vals.getValue();
+                for(Map.Entry<String, Integer> val : values.getValues().entrySet())
+                    sum += val.getValue();
             }
             counter.put(word, sum);
         }
@@ -169,14 +138,31 @@ public class ProbManager {
     }
 
     /**
-     * Return total number of contextCombinations create in context
+     * Return total number of combinations create in context
      *
-     * @return total number of contextCombinations in context
+     * @return total number of combinations in context
      */
-    private int getNumberOfCombinationsInContext() {
+    private int getNumberOfWordsInContext() {
         int sum = 0;
-        for (Map.Entry<String, Integer> wordOccurrences : contextCounter.entrySet())
+        for (Map.Entry<String, Integer> wordOccurrences : counter.entrySet())
             sum += wordOccurrences.getValue();
         return sum;
+    }
+
+    private double getEntropyFromContext(String word, String letter) {
+        double entropy, prob;
+        Probabilities probs = probabilities.get(word);
+        if (probs == null)
+            prob = (double) 1 / alphabet.size();
+        else {
+            Map <String, Double> letters = probs.getProbs();
+            if (letters.get(letter) == null)
+                prob = letters.get("?");
+            else
+                prob = letters.get(letter);
+        }
+        // log a (x) = log b (x) / log b (a)
+        entropy = Math.log10(prob) / Math.log10(2) * (-1);
+        return entropy;
     }
 }
