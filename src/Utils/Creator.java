@@ -69,6 +69,25 @@ public final class Creator {
         }
     }
 
+    public static Map<String, String> getLanguagesInUse() {
+        Map<String, String> languages = new HashMap<>();
+        languages.put("American", "AmericanText.txt");
+        languages.put("French", "FrenchText.txt");
+        languages.put("German", "GermanText.txt");
+        languages.put("Italian", "ItalianText.txt");
+        languages.put("Polish", "PolishText.txt");
+        languages.put("Portuguese", "PortugueseText.txt");
+        languages.put("Spanish", "SpanishText.txt");
+        languages.put("Swedish", "SwedishText.txt");
+        languages.put("Dutch", "DutchText.txt");
+        languages.put("Latin", "LatinText.txt");
+        languages.put("Catalan", "CatalanText.txt");
+        languages.put("Czech", "CzechText.txt");
+        languages.put("Brazilian", "BrazilianText.txt");
+        languages.put("British", "BritishText.txt");
+        return languages;
+    }
+
     /**
      * Create a new word in context or increment its value
      *

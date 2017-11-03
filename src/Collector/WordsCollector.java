@@ -18,7 +18,7 @@ import java.util.*;
  */
 
 // Class that collects statistical information about texts, using finite-context models
-public abstract class WordsCollector {
+public class WordsCollector {
     // List that counts the appearance of contexts in text
     private Map<String, Values> context;
     // List of combinations created in context
@@ -29,10 +29,11 @@ public abstract class WordsCollector {
     /**
      * Constructor
      */
-    public WordsCollector(String path) {
+    public WordsCollector(String path, int order) {
         context = new HashMap<>();
         contextCombinations = new ArrayList<>();
         alphabet = Creator.createAlphabet(path);
+        Creator.loadWords(path, order, context, alphabet, contextCombinations);
     }
 
     /**
