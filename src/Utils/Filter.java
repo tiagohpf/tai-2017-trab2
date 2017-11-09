@@ -19,8 +19,8 @@ public final class Filter {
 
     /**
      * Remove all special characters from text
-     *
      * @param text
+     * @return text filtered
      */
     public static String removeSpecialCharacters(String text) {
         text = text.replaceAll("[-+.…‘^:%,;’\'!?\\[\\]_\"–„“”()«»º—‑/ª°|<>*·&=€$£]", "")
@@ -29,6 +29,11 @@ public final class Filter {
         return text;
     }
 
+    /**
+     * Uppercase characters with special cases
+     * @param text
+     * @return
+     */
     public static String upperCaseCharacters(String text) {
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < text.length(); i++) {

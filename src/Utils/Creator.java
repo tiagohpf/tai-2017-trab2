@@ -17,6 +17,11 @@ import java.util.*;
 // Class that create objects
 public final class Creator {
 
+    /**
+     * Create an alphabet reading a certain file
+     * @param path of file
+     * @return alpabhet
+     */
     public static List<String> createAlphabet(String path) {
         File file = new File(path);
         try {
@@ -24,14 +29,18 @@ public final class Creator {
             List<String> alphabet = new ArrayList<>();
             while(sc.hasNext()) {
                 String line = sc.nextLine();
+                // Remove special characters from text
                 line = Filter.removeSpecialCharacters(line);
+                // Uppercase characters. Special handling in special characters
                 line = Filter.upperCaseCharacters(line);
-                for (int i = 0; i <  line.length(); i++) {
+                for (int i = 0; i < line.length(); i++) {
                     String character = Character.toString(line.charAt(i));
+                    // If character isn't in list, add it
                     if (!alphabet.contains(character))
                         alphabet.add(character);
                 }
             }
+            // Sort list alphabetically
             Collections.sort(alphabet);
             return alphabet;
         } catch (FileNotFoundException e) {
@@ -41,6 +50,14 @@ public final class Creator {
         return null;
     }
 
+    /**
+     * Load words from text file with a certain order
+     * @param path
+     * @param order
+     * @param context
+     * @param alphabet
+     * @param combinations
+     */
     public static void loadWords(String path, int order, Map<String, Values> context, List<String> alphabet,
                                  List<String> combinations) {
         // Create the file
@@ -50,7 +67,9 @@ public final class Creator {
             Scanner sc = new Scanner(file);
             while (sc.hasNext()) {
                 String line = sc.nextLine();
+                // Remove special characters from text
                 line = Filter.removeSpecialCharacters(line);
+                // Uppercase characters. Special handling in special characters
                 line = Filter.upperCaseCharacters(line);
                 // First, get the character in text
                 for (int i = order; i < line.length(); i++) {
@@ -69,6 +88,10 @@ public final class Creator {
         }
     }
 
+    /**
+     * Get list of available languages
+     * @return list of languages
+     */
     public static Map<String, String> getLanguagesInUse() {
         Map<String, String> languages = new HashMap<>();
         languages.put("American", "AmericanText.txt");
@@ -93,10 +116,12 @@ public final class Creator {
      *
      * If the word already exists in the context, increment its value
      * If not, create a new instance
-     *
      * @param context
      * @param word
      * @param letter
+     * @param alphabet
+     * @param combinations
+     * @param order
      */
     private static void addNewWord(Map<String, Values> context, String word, String letter,
                                    List<String> alphabet, List<String> combinations, int order) {
@@ -113,10 +138,12 @@ public final class Creator {
     /**
      * Create a new instance in context
      * If the association was found in text, create with value 1. Otherwise, create with value 0
-     *
      * @param context
      * @param word
      * @param letter
+     * @param alphabet
+     * @param combinations
+     * @param order
      */
     private static void createNewInstance(Map<String, Values> context, String word, String letter,
                                           List<String> alphabet, List<String> combinations, int order) {

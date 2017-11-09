@@ -13,17 +13,31 @@ import java.util.Map;
  * @author Tiago Faria, 73714, tiagohpf@ua.pt
  */
 
+// Class that represents probabilities in values of Maps
 public class Probabilities {
+    // Pair <letter, probability>
     private Map<String, Double> probs;
 
+    /**
+     * Constructor
+     */
     public Probabilities() {
         probs = new HashMap<>();
     }
 
+    /**
+     * Get probabilities
+     * @return probabilities
+     */
     public Map<String, Double> getProbs() {
         return probs;
     }
 
+    /**
+     * Add a new probability
+     * @param letter
+     * @param prob
+     */
     public void addValue(String letter, double prob) {
         probs.put(letter, prob);
     }

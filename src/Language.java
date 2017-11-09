@@ -7,7 +7,7 @@ import java.util.*;
 
 /**
  * TAI, November 2017
- * <p>
+ *
  * Assignment 2 - Language recognition system
  *
  * @author Bárbara Jael, 73241, barbara.jael@ua.pt

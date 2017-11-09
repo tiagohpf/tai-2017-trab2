@@ -9,7 +9,7 @@ import java.util.*;
 
 /**
  * TAI, November 2017
- * <p>
+ *
  * Assignment 2 - Language recognition system
  *
  * @author Bárbara Jael, 73241, barbara.jael@ua.pt
@@ -28,6 +28,8 @@ public class WordsCollector {
 
     /**
      * Constructor
+     * @param path
+     * @param order
      */
     public WordsCollector(String path, int order) {
         context = new HashMap<>();
@@ -54,6 +56,10 @@ public class WordsCollector {
         return contextCombinations;
     }
 
+    /**
+     * Return the alphabet of language
+     * @return alphabet
+     */
     public List<String> getAlphabet() {
         return alphabet;
     }
