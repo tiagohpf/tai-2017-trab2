@@ -23,7 +23,7 @@ public final class Filter {
      * @param text
      */
     public static String removeSpecialCharacters(String text) {
-        text = text.replaceAll("[-+.…‘^:%,;’\'!?\\[\\]_\"–„“”()«»º—‑/ª°|<>*·&=]", "")
+        text = text.replaceAll("[-+.…‘^:%,;’\'!?\\[\\]_\"–„“”()«»º—‑/ª°|<>*·&=€$£]", "")
                 .replaceAll("[0-9]", "")
                 .replaceAll("  \\+", " ");
         return text;
@@ -50,20 +50,6 @@ public final class Filter {
      */
     public static Map<String, Values> filterContext(Map<String, Values> context, String word) {
         return  context.entrySet().stream()
-                .filter(map -> map.getKey().equals(word))
-                .collect(Collectors.toMap(p -> p.getKey(), p -> p.getValue()));
-    }
-
-    /**
-     * Filter context with probabilities given a certain word
-     * @param context
-     * @param word
-     *
-     * @return filtered context
-     */
-    public static Map<String, Probabilities> filterContextProbs(Map<String, Probabilities> context,
-                                                                String word) {
-        return context.entrySet().stream()
                 .filter(map -> map.getKey().equals(word))
                 .collect(Collectors.toMap(p -> p.getKey(), p -> p.getValue()));
     }

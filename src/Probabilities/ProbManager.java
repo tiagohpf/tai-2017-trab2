@@ -81,15 +81,6 @@ public class ProbManager {
     }
 
     /**
-     * Get all probabilities from context
-     *
-     * @return probabilities of context
-     */
-    public Map<String, Probabilities> getProbabilities() {
-        return probabilities;
-    }
-
-    /**
      * Get number of occurrences in each word of context
      *
      * @return number of occurrences in context
@@ -135,18 +126,6 @@ public class ProbManager {
                 probabilities.put(term, probs);
             }
         }
-    }
-
-    /**
-     * Return total number of combinations create in context
-     *
-     * @return total number of combinations in context
-     */
-    private int getNumberOfWordsInContext() {
-        int sum = 0;
-        for (Map.Entry<String, Integer> wordOccurrences : counter.entrySet())
-            sum += wordOccurrences.getValue();
-        return sum;
     }
 
     private double getEntropyFromContext(String word, String letter) {

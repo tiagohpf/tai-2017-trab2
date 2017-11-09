@@ -24,15 +24,7 @@ public class Probabilities {
         return probs;
     }
 
-    public void setProbs(Map<String, Double> probs) {
-        this.probs = probs;
-    }
-
     public void addValue(String letter, double prob) {
         probs.put(letter, prob);
-    }
-
-    public double getNumber(String letter) {
-        return probs.get(letter);
     }
 }

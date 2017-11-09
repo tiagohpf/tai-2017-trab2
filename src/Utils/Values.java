@@ -24,10 +24,6 @@ public class Values {
         return values;
     }
 
-    public void setValues(Map<String, Integer> values) {
-        this.values = values;
-    }
-
     public void addValue(String letter, int number) {
         values.put(letter, number);
     }
